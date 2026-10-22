@@ -48,18 +48,18 @@ A browser request to the EC2 address is served by httpd from the copy of `site/`
 
 ## Addresses
 
-EC2: pending launch
+EC2: http://13.61.190.218/
 
-Lambda: pending launch
+Lambda: https://mpihm73jk5ynszsboz4zbduhay0drspl.lambda-url.eu-north-1.on.aws/
 
 Direct S3 object (must stay denied): `https://cv-i230100.s3.eu-north-1.amazonaws.com/site/index.html`
 
 ## Access denied from the instance
 
-The EC2 role can read `site/` and list that prefix. It cannot delete or overwrite an object. This is the output of trying that from the instance shell:
+The EC2 role can read `site/` and list that prefix. It cannot delete or overwrite an object. This is the output of `aws s3 rm s3://cv-i230100/site/index.html --region eu-north-1` from the instance shell:
 
 ```
-pending — captured after the instance is up
+delete failed: s3://cv-i230100/site/index.html An error occurred (AccessDenied) when calling the DeleteObject operation: User: arn:aws:sts::487694860646:assumed-role/cv-ec2-role-i230100/i-0a95a07241d04a7ab is not authorized to perform: s3:DeleteObject on resource: "arn:aws:s3:::cv-i230100/site/index.html" because no identity-based policy allows the s3:DeleteObject action
 ```
 
 ## Last 10 lines of /var/log/cv-sync.log
@@ -67,7 +67,9 @@ pending — captured after the instance is up
 `ec2/sync-cv.sh` runs once from user data and then from a systemd timer every 5 minutes (`OnUnitActiveSec=5min`).
 
 ```
-pending — captured after at least three runs
+2026-10-22T22:18:41Z OK sync worked
+2026-10-22T22:19:09Z OK sync worked
+2026-10-22T22:24:13Z OK sync worked
 ```
 
 ## Written answers
