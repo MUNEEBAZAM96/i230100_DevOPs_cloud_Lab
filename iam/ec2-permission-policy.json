@@ -1,0 +1,32 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "GetSiteObjects",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::cv-i230100/site/index.html",
+        "arn:aws:s3:::cv-i230100/site/style.css",
+        "arn:aws:s3:::cv-i230100/site/cv.pdf"
+      ]
+    },
+    {
+      "Sid": "ListSitePrefix",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::cv-i230100",
+      "Condition": {
+        "StringEquals": {
+          "s3:prefix": [
+            "site",
+            "site/",
+            "site/index.html",
+            "site/style.css",
+            "site/cv.pdf"
+          ]
+        }
+      }
+    }
+  ]
+}

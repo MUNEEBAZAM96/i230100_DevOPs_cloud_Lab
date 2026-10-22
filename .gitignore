@@ -1,0 +1,6 @@
+.DS_Store
+*.pem
+.env
+*.zip
+__pycache__/
+deploy-outputs.txt
