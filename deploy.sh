@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Create the private bucket, both roles, the EC2 site, and the Lambda site.
-# Region for every resource in this lab: us-east-1.
+# Region for every resource in this lab: eu-north-1 (Stockholm).
+# AWS Budgets is a global API and stays on us-east-1.
 set -euo pipefail
 
-REGION="us-east-1"
+REGION="eu-north-1"
 export AWS_DEFAULT_REGION="$REGION"
 export AWS_PAGER=""
 
@@ -73,7 +74,11 @@ if aws s3api head-bucket --bucket "$BUCKET" >/dev/null 2>&1; then
 else
   echo "Creating bucket ${BUCKET}"
   set +e
-  create_err="$(aws s3api create-bucket --bucket "$BUCKET" --region "$REGION" 2>&1)"
+  if [[ "$REGION" == "us-east-1" ]]; then
+    create_err="$(aws s3api create-bucket --bucket "$BUCKET" --region "$REGION" 2>&1)"
+  else
+    create_err="$(aws s3api create-bucket --bucket "$BUCKET" --region "$REGION" --create-bucket-configuration "LocationConstraint=${REGION}" 2>&1)"
+  fi
   create_ec=$?
   set -e
   if [[ "$create_ec" -ne 0 ]]; then

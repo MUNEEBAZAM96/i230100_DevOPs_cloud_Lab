@@ -9,7 +9,7 @@ BUCKET="$1"
 EC2_URL="$2"
 LAMBDA_URL="$3"
 
-REGION="us-east-1"
+REGION="eu-north-1"
 export AWS_DEFAULT_REGION="$REGION"
 export AWS_PAGER=""
 
@@ -60,7 +60,7 @@ run_into aws s3api get-bucket-versioning --region "$REGION" --bucket "$BUCKET" -
 printf '\n' >> "$OUT"
 
 section "objects"
-run_into aws s3 ls "s3://${BUCKET}/site/" --region "$REGION"
+run_into aws s3 ls "s3://${BUCKET}/site/" --recursive --region "$REGION"
 printf '\n' >> "$OUT"
 
 section "ec2-policy"
@@ -147,11 +147,11 @@ section "endpoints"
 
 section "lambda-logs"
 {
-  logs="$(aws logs tail "$LOG_GROUP" --region "$REGION" --since 6h --format short --no-follow 2>&1)" && lec=0 || lec=$?
+  logs="$(aws logs tail "$LOG_GROUP" --region "$REGION" --since 6h --format short 2>&1)" && lec=0 || lec=$?
   if [[ "$lec" -eq 0 ]]; then
     printf '%s\n' "$logs" | tail -n 40
   else
-    printf 'COMMAND FAILED (exit %s): aws logs tail %s --since 6h --format short --no-follow\n%s\n' "$lec" "$LOG_GROUP" "$logs"
+    printf 'COMMAND FAILED (exit %s): aws logs tail %s --since 6h --format short\n%s\n' "$lec" "$LOG_GROUP" "$logs"
   fi
 } >> "$OUT"
 printf '\n' >> "$OUT"

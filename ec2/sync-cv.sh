@@ -1,12 +1,12 @@
 #!/bin/bash
 # Copy site/ from the private bucket into the web root, then stamp the footer.
 export AWS_PAGER=""
-export AWS_DEFAULT_REGION="us-east-1"
+export AWS_DEFAULT_REGION="eu-north-1"
 
 BUCKET="cv-i230100"
 DEST="/var/www/html"
 LOG="/var/log/cv-sync.log"
-REGION="us-east-1"
+REGION="eu-north-1"
 
 timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 mkdir -p "$DEST"
